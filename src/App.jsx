@@ -3,7 +3,7 @@ import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Download }
 
 export default function WritingApp() {
   const editorRef = useRef(null);
-  const [fontSize, setFontSize] = useState(14);
+  const [fontSize, setFontSize] = useState(16);
   const [wordCount, setWordCount] = useState(0);
   const [fontFamily, setFontFamily] = useState("Times New Roman, serif");
 
@@ -53,9 +53,9 @@ export default function WritingApp() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center p-6">
-      {/* Top bar: word count + export */}
-      <div className="flex justify-between items-center w-full max-w-3xl mb-4">
+    <div className="min-h-screen bg-[#f9f9f9] flex flex-col items-center p-6">
+      {/* Word count & export */}
+      <div className="flex justify-between items-center w-full max-w-3xl mb-6">
         <span className="text-sm text-gray-600">Words: {wordCount}</span>
         <div className="flex gap-2">
           <button onClick={() => exportFile("md")} className="p-2 border rounded hover:bg-gray-50">
@@ -76,7 +76,7 @@ export default function WritingApp() {
         <button onClick={() => exec("justifyCenter")} className="p-2 border rounded hover:bg-gray-50"><AlignCenter className="w-4 h-4" /></button>
         <button onClick={() => exec("justifyRight")} className="p-2 border rounded hover:bg-gray-50"><AlignRight className="w-4 h-4" /></button>
 
-        {/* Font Family Dropdown */}
+        {/* Font family */}
         <select
           value={fontFamily}
           onChange={(e) => setFontFamily(e.target.value)}
@@ -89,7 +89,7 @@ export default function WritingApp() {
           <option value="Verdana, sans-serif">Verdana</option>
         </select>
 
-        {/* Font Size Dropdown */}
+        {/* Font size */}
         <select
           value={fontSize}
           onChange={(e) => setFontSize(Number(e.target.value))}
@@ -113,18 +113,17 @@ export default function WritingApp() {
         </select>
       </div>
 
-      {/* Editor */}
-      <div className="editor-container w-full max-w-3xl mx-auto"
-        ref={editorRef}
-        contentEditable
-        suppressContentEditableWarning
-        onInput={handleInput}
-        style={{
-          fontFamily: fontFamily,
-          fontSize: fontSize + "px",
-        }}
-        className="editor-container"
-      />
+      {/* Editor container */}
+      <div className="editor-container w-full max-w-3xl mx-auto bg-white rounded-2xl p-6 shadow-lg">
+        <div
+          ref={editorRef}
+          contentEditable
+          suppressContentEditableWarning
+          onInput={handleInput}
+          className="editor outline-none whitespace-pre-wrap min-h-[400px] leading-relaxed"
+          style={{ fontSize: fontSize + "px", fontFamily }}
+        />
+      </div>
     </div>
   );
 }
