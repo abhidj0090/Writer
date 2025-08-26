@@ -4,6 +4,7 @@
 
 body {
   font-family: "Times New Roman", serif;
+  background-color: #f9f9f9;
 }
 
 .export-buttons button {
@@ -47,13 +48,12 @@ button:hover {
   color: #000;
 }
 .editor-container {
-  max-width: 800px;       /* limit width for readability */
-  margin: 3rem auto;      /* top/bottom & center horizontally */
-  padding: 2rem;          /* internal padding inside the writing space */
-  border: 1px solid #ccc;
+  background: #fff;
   border-radius: 1rem;
-  background-color: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 3rem;
+  max-width: 800px;
+  margin: 5rem auto;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
 .toolbar {
   display: flex;
