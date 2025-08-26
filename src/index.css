@@ -46,4 +46,24 @@ button:hover {
   background-color: #f0f0f0;
   color: #000;
 }
-
+.editor-container {
+  max-width: 800px;       /* limit width for readability */
+  margin: 3rem auto;      /* top/bottom & center horizontally */
+  padding: 2rem;          /* internal padding inside the writing space */
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.toolbar {
+  display: flex;
+  gap: 0.5rem;           /* space between buttons */
+  margin-bottom: 1rem;   /* space between toolbar and editor */
+  justify-content: flex-start;
+}
+.word-count {
+  text-align: right;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 1rem;  /* space between word count and editor */
+}
