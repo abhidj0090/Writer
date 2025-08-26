@@ -5,12 +5,14 @@ export default function WritingApp() {
   const editorRef = useRef(null);
   const [fontSize, setFontSize] = useState(14);
   const [wordCount, setWordCount] = useState(0);
+  const [fontFamily, setFontFamily] = useState("Times New Roman, serif");
 
   useEffect(() => {
     if (editorRef.current) {
       editorRef.current.style.fontSize = fontSize + "px";
+      editorRef.current.style.fontFamily = fontFamily;
     }
-  }, [fontSize]);
+  }, [fontSize, fontFamily]);
 
   const handleInput = () => {
     if (editorRef.current) {
@@ -28,7 +30,6 @@ export default function WritingApp() {
     let content = editorRef.current.innerHTML;
 
     if (type === "md") {
-      // Convert HTML to Markdown
       content = content
         .replace(/<b>(.*?)<\/b>/g, "**$1**")
         .replace(/<strong>(.*?)<\/strong>/g, "**$1**")
@@ -53,27 +54,40 @@ export default function WritingApp() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center p-6">
-      {/* Top bar */}
+      {/* Top bar: word count + export */}
       <div className="flex justify-between items-center w-full max-w-3xl mb-4">
         <span className="text-sm text-gray-600">Words: {wordCount}</span>
         <div className="flex gap-2">
-          <button onClick={() => exportFile("md")} className="p-2 border rounded hover:bg-gray-100">
+          <button onClick={() => exportFile("md")} className="p-2 border rounded hover:bg-gray-50">
             <Download className="w-4 h-4" /> .md
           </button>
-          <button onClick={() => exportFile("txt")} className="p-2 border rounded hover:bg-gray-100">
+          <button onClick={() => exportFile("txt")} className="p-2 border rounded hover:bg-gray-50">
             <Download className="w-4 h-4" /> .txt
           </button>
         </div>
       </div>
 
-      {/* Toolbar */}
-      <div className="flex gap-2 mb-4">
-        <button onClick={() => exec("bold")} className="p-2 border rounded hover:bg-gray-100"><Bold className="w-4 h-4" /></button>
-        <button onClick={() => exec("italic")} className="p-2 border rounded hover:bg-gray-100"><Italic className="w-4 h-4" /></button>
-        <button onClick={() => exec("underline")} className="p-2 border rounded hover:bg-gray-100"><Underline className="w-4 h-4" /></button>
-        <button onClick={() => exec("justifyLeft")} className="p-2 border rounded hover:bg-gray-100"><AlignLeft className="w-4 h-4" /></button>
-        <button onClick={() => exec("justifyCenter")} className="p-2 border rounded hover:bg-gray-100"><AlignCenter className="w-4 h-4" /></button>
-        <button onClick={() => exec("justifyRight")} className="p-2 border rounded hover:bg-gray-100"><AlignRight className="w-4 h-4" /></button>
+      {/* Toolbar: formatting + font selector */}
+      <div className="flex gap-2 mb-4 items-center w-full max-w-3xl">
+        <button onClick={() => exec("bold")} className="p-2 border rounded hover:bg-gray-50"><Bold className="w-4 h-4" /></button>
+        <button onClick={() => exec("italic")} className="p-2 border rounded hover:bg-gray-50"><Italic className="w-4 h-4" /></button>
+        <button onClick={() => exec("underline")} className="p-2 border rounded hover:bg-gray-50"><Underline className="w-4 h-4" /></button>
+        <button onClick={() => exec("justifyLeft")} className="p-2 border rounded hover:bg-gray-50"><AlignLeft className="w-4 h-4" /></button>
+        <button onClick={() => exec("justifyCenter")} className="p-2 border rounded hover:bg-gray-50"><AlignCenter className="w-4 h-4" /></button>
+        <button onClick={() => exec("justifyRight")} className="p-2 border rounded hover:bg-gray-50"><AlignRight className="w-4 h-4" /></button>
+
+        {/* Font selector */}
+        <select
+          value={fontFamily}
+          onChange={(e) => setFontFamily(e.target.value)}
+          className="ml-auto p-1 border rounded bg-white text-black cursor-pointer"
+        >
+          <option value="Times New Roman, serif">Times New Roman</option>
+          <option value="Arial, sans-serif">Arial</option>
+          <option value="Georgia, serif">Georgia</option>
+          <option value="Courier New, monospace">Courier New</option>
+          <option value="Verdana, sans-serif">Verdana</option>
+        </select>
       </div>
 
       {/* Editor */}
@@ -83,7 +97,7 @@ export default function WritingApp() {
         suppressContentEditableWarning
         onInput={handleInput}
         style={{
-          fontFamily: "Times New Roman, serif",
+          fontFamily: fontFamily,
           fontSize: fontSize + "px",
         }}
         className="border border-gray-300 rounded-2xl p-6 min-h-[400px] w-full max-w-3xl outline-none whitespace-pre-wrap"
