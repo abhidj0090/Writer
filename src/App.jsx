@@ -10,15 +10,7 @@ export default function WritingApp() {
   const [fontSize, setFontSize] = useState(16);
   const [fontFamily, setFontFamily] = useState("Times New Roman, serif");
   const [wordCount, setWordCount] = useState(0);
-  const [showToolbar, setShowToolbar] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
-
-  // Auto-hide toolbar after 3s of inactivity
-  useEffect(() => {
-    if (!showToolbar) return;
-    const id = setTimeout(() => setShowToolbar(false), 3000);
-    return () => clearTimeout(id);
-  }, [showToolbar, wordCount]);
 
   useEffect(() => {
     if (editorRef.current) {
@@ -31,7 +23,6 @@ export default function WritingApp() {
     if (!editorRef.current) return;
     const text = editorRef.current.innerText;
     setWordCount(text.trim().split(/\s+/).filter(Boolean).length);
-    setShowToolbar(true);
   };
 
   const exec = (command, value = null) => {
@@ -80,61 +71,59 @@ export default function WritingApp() {
         </button>
       </div>
 
-      {/* Toolbar */}
-      {showToolbar && (
-        <div className="flex flex-wrap gap-2 mb-4 w-full max-w-3xl transition-all duration-300">
-          <button onClick={() => exec("bold")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><Bold className="w-5 h-5" /></button>
-          <button onClick={() => exec("italic")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><Italic className="w-5 h-5" /></button>
-          <button onClick={() => exec("underline")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><Underline className="w-5 h-5" /></button>
-          <button onClick={() => exec("justifyLeft")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><AlignLeft className="w-5 h-5" /></button>
-          <button onClick={() => exec("justifyCenter")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><AlignCenter className="w-5 h-5" /></button>
-          <button onClick={() => exec("justifyRight")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><AlignRight className="w-5 h-5" /></button>
+      {/* Toolbar - always visible */}
+      <div className="flex flex-wrap gap-2 mb-4 w-full max-w-3xl transition-all duration-300">
+        <button onClick={() => exec("bold")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><Bold className="w-5 h-5" /></button>
+        <button onClick={() => exec("italic")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><Italic className="w-5 h-5" /></button>
+        <button onClick={() => exec("underline")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><Underline className="w-5 h-5" /></button>
+        <button onClick={() => exec("justifyLeft")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><AlignLeft className="w-5 h-5" /></button>
+        <button onClick={() => exec("justifyCenter")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><AlignCenter className="w-5 h-5" /></button>
+        <button onClick={() => exec("justifyRight")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><AlignRight className="w-5 h-5" /></button>
 
-          {/* Font Family */}
-          <select
-            value={fontFamily}
-            onChange={(e) => setFontFamily(e.target.value)}
-            className="p-2 border rounded bg-white dark:bg-gray-800 text-black dark:text-gray-100 cursor-pointer"
-          >
-            <option value="Times New Roman, serif">Times New Roman</option>
-            <option value="Arial, sans-serif">Arial</option>
-            <option value="Georgia, serif">Georgia</option>
-            <option value="Courier New, monospace">Courier New</option>
-            <option value="Verdana, sans-serif">Verdana</option>
-          </select>
+        {/* Font Family */}
+        <select
+          value={fontFamily}
+          onChange={(e) => setFontFamily(e.target.value)}
+          className="p-2 border rounded bg-white dark:bg-gray-800 text-black dark:text-gray-100 cursor-pointer"
+        >
+          <option value="Times New Roman, serif">Times New Roman</option>
+          <option value="Arial, sans-serif">Arial</option>
+          <option value="Georgia, serif">Georgia</option>
+          <option value="Courier New, monospace">Courier New</option>
+          <option value="Verdana, sans-serif">Verdana</option>
+        </select>
 
-          {/* Font Size */}
-          <select
-            value={fontSize}
-            onChange={(e) => setFontSize(Number(e.target.value))}
-            className="p-2 border rounded bg-white dark:bg-gray-800 text-black dark:text-gray-100 cursor-pointer"
-          >
-            {Array.from({ length: 7 }, (_, i) => 10 + i).map((size) => (
-              <option key={size} value={size}>{size}px</option>
-            ))}
-          </select>
+        {/* Font Size */}
+        <select
+          value={fontSize}
+          onChange={(e) => setFontSize(Number(e.target.value))}
+          className="p-2 border rounded bg-white dark:bg-gray-800 text-black dark:text-gray-100 cursor-pointer"
+        >
+          {Array.from({ length: 7 }, (_, i) => 10 + i).map((size) => (
+            <option key={size} value={size}>{size}px</option>
+          ))}
+        </select>
 
-          {/* Headings */}
-          <select
-            onChange={(e) => exec("formatBlock", e.target.value)}
-            className="p-2 border rounded bg-white dark:bg-gray-800 text-black dark:text-gray-100 cursor-pointer"
-            defaultValue="p"
-          >
-            <option value="p">Paragraph</option>
-            <option value="h1">Heading 1</option>
-            <option value="h2">Heading 2</option>
-            <option value="h3">Heading 3</option>
-          </select>
+        {/* Headings */}
+        <select
+          onChange={(e) => exec("formatBlock", e.target.value)}
+          className="p-2 border rounded bg-white dark:bg-gray-800 text-black dark:text-gray-100 cursor-pointer"
+          defaultValue="p"
+        >
+          <option value="p">Paragraph</option>
+          <option value="h1">Heading 1</option>
+          <option value="h2">Heading 2</option>
+          <option value="h3">Heading 3</option>
+        </select>
 
-          {/* Export */}
-          <button onClick={() => exportFile("md")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-1">
-            <Download className="w-5 h-5" /> .md
-          </button>
-          <button onClick={() => exportFile("txt")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-1">
-            <Download className="w-5 h-5" /> .txt
-          </button>
-        </div>
-      )}
+        {/* Export */}
+        <button onClick={() => exportFile("md")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-1">
+          <Download className="w-5 h-5" /> .md
+        </button>
+        <button onClick={() => exportFile("txt")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-1">
+          <Download className="w-5 h-5" /> .txt
+        </button>
+      </div>
 
       {/* Editor container */}
       <div className="editor-container w-full max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg transition-colors duration-300">
