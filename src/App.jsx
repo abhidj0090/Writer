@@ -114,7 +114,7 @@ export default function WritingApp() {
       </div>
 
       {/* Editor */}
-      <div
+      <div className="editor-container w-full max-w-3xl mx-auto"
         ref={editorRef}
         contentEditable
         suppressContentEditableWarning
