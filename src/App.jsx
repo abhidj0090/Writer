@@ -2,15 +2,17 @@ import { useRef, useState, useEffect } from "react";
 import {
   Bold, Italic, Underline,
   AlignLeft, AlignCenter, AlignRight,
-  Download, Sun, Moon
+  Download, Sun, Moon, Copy, Maximize, Minimize
 } from "lucide-react";
 
 export default function WritingApp() {
   const editorRef = useRef(null);
+  const containerRef = useRef(null);
   const [fontSize, setFontSize] = useState(16);
   const [fontFamily, setFontFamily] = useState("Times New Roman, serif");
   const [wordCount, setWordCount] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     if (editorRef.current) {
@@ -57,22 +59,39 @@ export default function WritingApp() {
     URL.revokeObjectURL(url);
   };
 
-  return (
-    <div className={`${darkMode ? "bg-gray-900 text-gray-100" : "bg-[#f9f9f9] text-gray-900"} min-h-screen flex flex-col items-center p-4 sm:p-6`}>
-      
-      {/* Top bar: words & dark mode toggle */}
-      <div className="flex justify-between items-center w-full max-w-3xl mb-4">
-        <span className="text-sm">{wordCount} words</span>
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
-        >
-          {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-        </button>
-      </div>
+  const copyToClipboard = () => {
+    if (!editorRef.current) return;
+    navigator.clipboard.writeText(editorRef.current.innerText);
+    alert("Copied to clipboard!");
+  };
 
-      {/* Toolbar - always visible */}
-      <div className="flex flex-wrap gap-2 mb-4 w-full max-w-3xl transition-all duration-300">
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen);
+  };
+
+  return (
+    <div
+      className={`${darkMode ? "bg-gray-900 text-gray-100" : "bg-[#f9f9f9] text-gray-900"} min-h-screen flex flex-col items-center p-4 sm:p-6`}
+    >
+      {/* Top bar: words & dark mode toggle */}
+      {!isFullscreen && (
+        <div className="flex justify-between items-center w-full max-w-3xl mb-4">
+          <span className="text-sm">{wordCount} words</span>
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+          >
+            {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
+        </div>
+      )}
+
+      {/* Toolbar */}
+      <div
+        className={`flex flex-wrap gap-2 mb-4 w-full max-w-3xl transition-all duration-300 ${
+          isFullscreen ? "fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-white dark:bg-gray-800 p-2 rounded-xl shadow-lg" : ""
+        }`}
+      >
         <button onClick={() => exec("bold")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><Bold className="w-5 h-5" /></button>
         <button onClick={() => exec("italic")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><Italic className="w-5 h-5" /></button>
         <button onClick={() => exec("underline")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><Underline className="w-5 h-5" /></button>
@@ -80,7 +99,6 @@ export default function WritingApp() {
         <button onClick={() => exec("justifyCenter")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><AlignCenter className="w-5 h-5" /></button>
         <button onClick={() => exec("justifyRight")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"><AlignRight className="w-5 h-5" /></button>
 
-        {/* Font Family */}
         <select
           value={fontFamily}
           onChange={(e) => setFontFamily(e.target.value)}
@@ -93,7 +111,6 @@ export default function WritingApp() {
           <option value="Verdana, sans-serif">Verdana</option>
         </select>
 
-        {/* Font Size */}
         <select
           value={fontSize}
           onChange={(e) => setFontSize(Number(e.target.value))}
@@ -104,7 +121,6 @@ export default function WritingApp() {
           ))}
         </select>
 
-        {/* Headings */}
         <select
           onChange={(e) => exec("formatBlock", e.target.value)}
           className="p-2 border rounded bg-white dark:bg-gray-800 text-black dark:text-gray-100 cursor-pointer"
@@ -116,17 +132,29 @@ export default function WritingApp() {
           <option value="h3">Heading 3</option>
         </select>
 
-        {/* Export */}
         <button onClick={() => exportFile("md")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-1">
           <Download className="w-5 h-5" /> .md
         </button>
         <button onClick={() => exportFile("txt")} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-1">
           <Download className="w-5 h-5" /> .txt
         </button>
+
+        <button onClick={copyToClipboard} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-1">
+          <Copy className="w-5 h-5" /> Copy
+        </button>
+
+        <button onClick={toggleFullscreen} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-1">
+          {isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />} Fullscreen
+        </button>
       </div>
 
       {/* Editor container */}
-      <div className="editor-container w-full max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg transition-colors duration-300">
+      <div
+        ref={containerRef}
+        className={`editor-container w-full max-w-3xl mx-auto rounded-2xl p-6 shadow-lg transition-colors duration-300 ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        } ${isFullscreen ? "fixed inset-0 z-40 m-4 overflow-auto" : ""}`}
+      >
         <div
           ref={editorRef}
           contentEditable
