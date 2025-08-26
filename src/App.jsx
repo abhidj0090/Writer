@@ -164,6 +164,10 @@ export default function WritingApp() {
         className={`editor-container w-full max-w-3xl mx-auto rounded-2xl p-6 shadow-lg transition-colors duration-300 ${
           darkMode ? "bg-gray-800" : "bg-white"
         } ${isFullscreen ? "fixed inset-0 z-40 m-4 overflow-auto" : ""}`}
+         style={{
+          backgroundColor: darkMode ? "#1f2937" : "#ffffff", // editor background
+          caretColor: darkMode ? "#ffffff" : "#000000",
+        }}
       >
       <div
         ref={editorRef}
