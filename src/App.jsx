@@ -165,17 +165,20 @@ export default function WritingApp() {
           darkMode ? "bg-gray-800" : "bg-white"
         } ${isFullscreen ? "fixed inset-0 z-40 m-4 overflow-auto" : ""}`}
       >
-        <div
-          ref={editorRef}
-          contentEditable
-          suppressContentEditableWarning
-          onInput={handleInput}
-          className={`editor outline-none whitespace-pre-wrap min-h-[300px] sm:min-h-[400px] leading-relaxed p-4 sm:p-6 ${
-            darkMode ? "text-gray-100 caret-white" : "text-gray-900 caret-black"
-          }`}
-          style={{ fontSize: fontSize + "px", fontFamily }}
-          placeholder="Start writing..."
-        />
+      <div
+        ref={editorRef}
+        contentEditable
+        suppressContentEditableWarning
+        onInput={handleInput}
+        style={{
+          fontSize: fontSize + "px",
+          fontFamily: fontFamily,
+          color: darkMode ? "#f9fafb" : "#111827", // light text in dark mode, dark text in light
+          backgroundColor: darkMode ? "#1f2937" : "#ffffff", // editor background
+          caretColor: darkMode ? "#ffffff" : "#000000",
+        }}
+        className="editor outline-none whitespace-pre-wrap min-h-[300px] sm:min-h-[400px] leading-relaxed p-4 sm:p-6"
+      />
       </div>
     </div>
   );
