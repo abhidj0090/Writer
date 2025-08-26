@@ -14,6 +14,16 @@ export default function WritingApp() {
   const [darkMode, setDarkMode] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  // Persist theme in localStorage
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('darkMode');
+    if (storedTheme) setDarkMode(JSON.parse(storedTheme));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+  }, [darkMode]);
+
   useEffect(() => {
     if (editorRef.current) {
       editorRef.current.style.fontSize = fontSize + "px";
@@ -73,7 +83,7 @@ export default function WritingApp() {
     <div
       className={`${darkMode ? "bg-gray-900 text-gray-100" : "bg-[#f9f9f9] text-gray-900"} min-h-screen flex flex-col items-center p-4 sm:p-6`}
     >
-      {/* Top bar: words & dark mode toggle */}
+      {/* Top bar */}
       {!isFullscreen && (
         <div className="flex justify-between items-center w-full max-w-3xl mb-4">
           <span className="text-sm">{wordCount} words</span>
@@ -149,23 +159,23 @@ export default function WritingApp() {
       </div>
 
       {/* Editor container */}
+      <div
+        ref={containerRef}
+        className={`editor-container w-full max-w-3xl mx-auto rounded-2xl p-6 shadow-lg transition-colors duration-300 ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        } ${isFullscreen ? "fixed inset-0 z-40 m-4 overflow-auto" : ""}`}
+      >
         <div
-          ref={containerRef}
-          className={`editor-container w-full max-w-3xl mx-auto rounded-2xl p-6 shadow-lg transition-colors duration-300 ${
-            darkMode ? "bg-gray-800" : "bg-white"
-          } ${isFullscreen ? "fixed inset-0 z-40 m-4 overflow-auto" : ""}`}
-        >
-          <div
-            ref={editorRef}
-            contentEditable
-            suppressContentEditableWarning
-            onInput={handleInput}
-            className={`editor outline-none whitespace-pre-wrap min-h-[300px] sm:min-h-[400px] leading-relaxed p-4 sm:p-6 ${
-              darkMode ? "text-gray-100 caret-white" : "text-gray-900 caret-black"
-            }`}
-            style={{ fontSize: fontSize + "px", fontFamily }}
-            placeholder="Start writing..."
-          />
+          ref={editorRef}
+          contentEditable
+          suppressContentEditableWarning
+          onInput={handleInput}
+          className={`editor outline-none whitespace-pre-wrap min-h-[300px] sm:min-h-[400px] leading-relaxed p-4 sm:p-6 ${
+            darkMode ? "text-gray-100 caret-white" : "text-gray-900 caret-black"
+          }`}
+          style={{ fontSize: fontSize + "px", fontFamily }}
+          placeholder="Start writing..."
+        />
       </div>
     </div>
   );
