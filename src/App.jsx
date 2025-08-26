@@ -181,7 +181,7 @@ export default function WritingApp() {
           backgroundColor: darkMode ? "#1f2937" : "#ffffff", // editor background
           caretColor: darkMode ? "#ffffff" : "#000000",
         }}
-        className="editor outline-none whitespace-pre-wrap min-h-[300px] sm:min-h-[400px] leading-relaxed p-4 sm:p-6"
+        className="editor outline-none whitespace-pre-wrap min-h-[300px] sm:min-h-[400px] leading-relaxed p-4 sm:p-6 [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:mb-4 [&>h1]:mt-6 [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:mb-3 [&>h2]:mt-5 [&>h3]:text-xl [&>h3]:font-bold [&>h3]:mb-2 [&>h3]:mt-4 [&>p]:mb-4 [&>div]:mb-4"
       />
       </div>
     </div>
