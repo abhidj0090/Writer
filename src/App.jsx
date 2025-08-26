@@ -21,8 +21,8 @@ export default function WritingApp() {
     }
   };
 
-  const exec = (command) => {
-    document.execCommand(command, false, null);
+  const exec = (command, value = null) => {
+    document.execCommand(command, false, value);
   };
 
   const exportFile = (type) => {
@@ -67,7 +67,7 @@ export default function WritingApp() {
         </div>
       </div>
 
-      {/* Toolbar: formatting + font selector */}
+      {/* Toolbar */}
       <div className="flex gap-2 mb-4 items-center w-full max-w-3xl">
         <button onClick={() => exec("bold")} className="p-2 border rounded hover:bg-gray-50"><Bold className="w-4 h-4" /></button>
         <button onClick={() => exec("italic")} className="p-2 border rounded hover:bg-gray-50"><Italic className="w-4 h-4" /></button>
@@ -76,7 +76,7 @@ export default function WritingApp() {
         <button onClick={() => exec("justifyCenter")} className="p-2 border rounded hover:bg-gray-50"><AlignCenter className="w-4 h-4" /></button>
         <button onClick={() => exec("justifyRight")} className="p-2 border rounded hover:bg-gray-50"><AlignRight className="w-4 h-4" /></button>
 
-        {/* Font selector */}
+        {/* Font Family Dropdown */}
         <select
           value={fontFamily}
           onChange={(e) => setFontFamily(e.target.value)}
@@ -87,6 +87,29 @@ export default function WritingApp() {
           <option value="Georgia, serif">Georgia</option>
           <option value="Courier New, monospace">Courier New</option>
           <option value="Verdana, sans-serif">Verdana</option>
+        </select>
+
+        {/* Font Size Dropdown */}
+        <select
+          value={fontSize}
+          onChange={(e) => setFontSize(Number(e.target.value))}
+          className="p-1 border rounded bg-white text-black cursor-pointer"
+        >
+          {Array.from({ length: 7 }, (_, i) => 10 + i).map((size) => (
+            <option key={size} value={size}>{size}px</option>
+          ))}
+        </select>
+
+        {/* Headings */}
+        <select
+          onChange={(e) => exec("formatBlock", e.target.value)}
+          className="p-1 border rounded bg-white text-black cursor-pointer"
+          defaultValue="p"
+        >
+          <option value="p">Paragraph</option>
+          <option value="h1">Heading 1</option>
+          <option value="h2">Heading 2</option>
+          <option value="h3">Heading 3</option>
         </select>
       </div>
 
@@ -100,7 +123,7 @@ export default function WritingApp() {
           fontFamily: fontFamily,
           fontSize: fontSize + "px",
         }}
-        className="border border-gray-300 rounded-2xl p-6 min-h-[400px] w-full max-w-3xl outline-none whitespace-pre-wrap"
+        className="border border-gray-300 rounded-2xl p-6 min-h-[400px] w-full max-w-3xl outline-none whitespace-pre-wrap leading-relaxed"
       />
     </div>
   );
