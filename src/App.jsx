@@ -149,21 +149,23 @@ export default function WritingApp() {
       </div>
 
       {/* Editor container */}
-      <div
-        ref={containerRef}
-        className={`editor-container w-full max-w-3xl mx-auto rounded-2xl p-6 shadow-lg transition-colors duration-300 ${
-          darkMode ? "bg-gray-800" : "bg-white"
-        } ${isFullscreen ? "fixed inset-0 z-40 m-4 overflow-auto" : ""}`}
-      >
         <div
-          ref={editorRef}
-          contentEditable
-          suppressContentEditableWarning
-          onInput={handleInput}
-          className="editor outline-none whitespace-pre-wrap min-h-[300px] sm:min-h-[400px] leading-relaxed p-4 sm:p-6"
-          style={{ fontSize: fontSize + "px", fontFamily }}
-          placeholder="Start writing..."
-        />
+          ref={containerRef}
+          className={`editor-container w-full max-w-3xl mx-auto rounded-2xl p-6 shadow-lg transition-colors duration-300 ${
+            darkMode ? "bg-gray-800" : "bg-white"
+          } ${isFullscreen ? "fixed inset-0 z-40 m-4 overflow-auto" : ""}`}
+        >
+          <div
+            ref={editorRef}
+            contentEditable
+            suppressContentEditableWarning
+            onInput={handleInput}
+            className={`editor outline-none whitespace-pre-wrap min-h-[300px] sm:min-h-[400px] leading-relaxed p-4 sm:p-6 ${
+              darkMode ? "text-gray-100 caret-white" : "text-gray-900 caret-black"
+            }`}
+            style={{ fontSize: fontSize + "px", fontFamily }}
+            placeholder="Start writing..."
+          />
       </div>
     </div>
   );
