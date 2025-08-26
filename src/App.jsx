@@ -123,7 +123,7 @@ export default function WritingApp() {
           fontFamily: fontFamily,
           fontSize: fontSize + "px",
         }}
-        className="border border-gray-300 rounded-2xl p-6 min-h-[400px] w-full max-w-3xl outline-none whitespace-pre-wrap leading-relaxed"
+        className="editor-container"
       />
     </div>
   );
