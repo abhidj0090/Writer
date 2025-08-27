@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 
 // ✅ Import logo (place logo.png inside /public folder)
-import logo from "/logo.png";
+import logo from './assets/logo.png';
 
 export default function WritingApp() {
   const editorRef = useRef(null);
