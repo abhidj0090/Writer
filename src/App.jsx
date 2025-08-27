@@ -90,7 +90,7 @@ export default function WritingApp() {
     >
       {/* 🔝 Logo above everything */}
       <div className="flex justify-center mb-4">
-        <img src={logo} alt="Paperlight Logo" className="h-24 object-contain" />
+        <a href="https://paperlight.netlify.app/"><img src={logo} alt="Paperlight Logo" className="h-24 object-contain" /></a>
       </div>
 
       {/* Top bar (only dark mode toggle now) */}
